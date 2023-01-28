@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Результаты{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+
+<h2>Результаты поиска:</h2>
+{% if result %}
+   <table>
+    <tr>
+        <th>Пользователь</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Адрес электронной почты</th>
+        <th>Статус персонала</th>
+    </tr>
+    {% for user in result %}
+    <tr>
+        <td><a href="{% url 'admin_user' user_id=user.id %}">{{ user.username }}</a></td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{% if user.is_staff %}Да{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+   {% if page_obj.has_other_pages %}
+   <ul class="list_pages">
+       {% if page_obj.has_previous %}
+           <li class="page_num">
+               <a href="?page={{ page_obj.previous_page_number }}&q={{ data }}">Предыдущая</a>
+           </li>
+       {% endif %}
+
+       <!-- First page -->
+       {% if page_obj.number >= 4 %}
+           <li class="page_num">
+               <a href="?page={{ page_obj.first_page_number }}&q={{ data }}">1</a> ...
+           </li>
+       {% endif %}
+
+       {% for p in paginator.page_range %}
+           {% if page_obj.number == p %}
+               <li class="page_num page_num_selected"><p>{{ p }}</p></li>
+           {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+               <li class="page_num">
+                   <a href='?page={{ p }}&q={{ data }}'>{{ p }}</a>
+               </li>
+           {% endif %}
+       {% endfor %}
+
+       <!-- Last page -->
+       {% if page_obj.number <= page_obj.paginator.num_pages|add:-3 %}
+           <li class="page_num">
+               ... <a href="?page={{ page_obj.paginator.num_pages }}&q={{ data }}">{{ page_obj.paginator.num_pages }}</a>
+           </li>
+       {% endif %}
+
+       {% if page_obj.has_next %}
+           <li class="page_num">
+               <a href="?page={{ page_obj.next_page_number }}&q={{ data }}">Следующая</a>
+           </li>
+       {% endif %}
+   </ul>
+{% endif %}
+{% else %}
+   <h3>Результаты не найдены.</h3>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<h2>Пользователи</h2>
+<p><a href="{% url 'admin_add_user' %}">Добавить пользователя</a></p>
+<form action="{% url 'admin_search_user' %}" method="get">
+    <input type="search" placeholder="Введите пользователя" name="q" required="">
+    <input type="submit" value="Найти">
+</form>
+<br>
+<table>
+    <tr>
+        <th>Пользователь</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Адрес электронной почты</th>
+        <th>Статус персонала</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td><a href="{% url 'admin_user' user_id=user.id %}">{{ user }}</a></td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{% if user.is_staff %}Да{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Количество пользователей: {{ quantity }}.</p>
+
+{% if page_obj.has_other_pages %}
+   <nav>
+       {% if page_obj.has_previous %}
+               <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a> |
+       {% endif %}
+
+       <!-- First page -->
+       {% if page_obj.number >= 4 %}
+               <a href="?page={{ page_obj.first_page_number }}">1</a> ... |
+       {% endif %}
+
+       {% for p in paginator.page_range %}
+           {% if page_obj.number == p %}
+               {{ p }} |
+           {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                   <a href='?page={{ p }}'>{{ p }}</a> |
+           {% endif %}
+       {% endfor %}
+
+       <!-- Last page -->
+       {% if page_obj.number <= page_obj.paginator.num_pages|add:-3 %}
+               ... <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a> |
+       {% endif %}
+
+       {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+       {% endif %}
+   </nav>
+{% endif %}
+{% endblock %}

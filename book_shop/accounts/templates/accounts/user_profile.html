@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Мой профиль
+{% endblock %}
+
+
+{% block css_additional %}
+<link rel="stylesheet" href="{% static 'example/css/user_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<h3>Мой профиль</h3>
+<p><a href="{% url 'my_orders' %}">Мои заказы</a></p>
+<p><a href="{% url 'change_user_data' %}">Изменить личные данные</a></p>
+{% endblock %}

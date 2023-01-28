@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Добавить жанр{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<form action="{% url 'admin_add_genre' %}" method="post" >
+    {% csrf_token %}
+    <h1>Добавить жанр</h1>
+    <table>
+        {% for f in new_genre %}
+        <tr>
+            <td>{{ f.label|upper }}:</td>
+            <td>{{ f }}</td>
+            <td>{% if f.errors %}{{ f.errors }}{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Сохранить и добавить другой жанр" name="save_and_add_new">
+    <input type="submit" value="Сохранить" name="save">
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Выход
+{% endblock %}
+
+
+{% block css_additional %}
+{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+
+<div class="log">
+    <form action="{% url 'my_logout' %}" method="post">
+        {% csrf_token %}
+        <p>Вы вошли как {{ request.user }}</p>
+        <p>Вы действительно хотите выйти?</p>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input type="submit" value="Выйти">
+    </form>
+</div>
+{% endblock %}

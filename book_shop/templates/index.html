@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Главная{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+{% if request.user.is_authenticated %}
+    <h3>Добро пожаловать,
+        {% if request.user.first_name %}{{ request.user.first_name }}
+        {% else %}{{ request.user }}{% endif %}!
+    </h3>
+{% else %}
+    <h3>Добро пожаловать!</h3>
+{% endif %}
+{% endblock %}

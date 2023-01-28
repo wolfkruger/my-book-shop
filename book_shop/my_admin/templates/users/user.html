@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Информация о пользователе{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+
+<form action="{% url 'admin_user' user_id=user.id %}" method="post" >
+    {% csrf_token %}
+    <h2>Изменение данных {{user}}</h2>
+
+    <table>
+        {% for f in form %}
+        <tr>
+            <td>{{ f.label|upper }}:</td>
+            <td>{{ f }}</td>
+            <td>{% if f.errors %}{{ f.errors }}{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Удалить" name="delete">
+    <input type="submit" value="Сохранить и добавить новаго пользователя" name="save_and_add_new">
+    <input type="submit" value="Сохранить и продолжить редактирование" name="save_and_continue">
+    <input type="submit" value="Сохранить" name="save">
+</form>
+
+{% endblock %}

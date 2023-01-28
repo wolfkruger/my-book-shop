@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ book }}{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<h3>{{ book }}</h3>
+<p>
+    {% if book.image %}
+        <img class="book-image" src="{{ book.image.url }}" alt=""><br>
+    {% endif %}
+    {% for authorship in book.authorship.all %}{{ authorship }}<br>{% endfor %}
+    {% if book.genre %}Жанр: {{ book.genre }}<br>{% endif %}
+    {% if book.year %}{{ book.year }}{% endif %}
+    {% if book.description %}Описание: {{ book.description }}<br>{% endif %}
+    Количество: {{ book.number }} шт.<br>
+    Цена: {{ book.price }} р.
+</p>
+{% if request.user.is_authenticated %}
+    {% if book.available %}
+        {% if quantity %}
+            <form action="{% url 'add_to_my_cart' book_id=book.id %}" method="post">
+                <label for="id_quantity">Количество:</label>
+                <select name="quantity" id="id_quantity">
+                    {% for q in quantity %}
+                        <option value="{{ q }}">{{ q }}</option>
+                    {% endfor %}
+                </select>
+
+                {% csrf_token %}
+                <input type="submit" value="Добавить в корзину">
+            </form>
+        {% else %}
+            <p>Вы добавили в корзину максимальное количество экземпляров этой книги.</p>
+        {% endif %}
+    {% else %}
+            <p>Нет в наличии.</p>
+    {% endif %}
+{% else %}
+        <p><a href="{% url 'my_login' %}?next={{ request.path|urlencode }}">Войдите</a> в аккаунт, чтобы добавить товар в корзину.</p>
+{% endif %}
+{% endblock %}

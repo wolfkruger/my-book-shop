@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Заказ принят{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<h2>Заказ принят</h2>
+<h3>Спасибо за покупку!</h3>
+<a href="{% url 'my_orders' %}">Мои заказы</a>
+{% endblock %}

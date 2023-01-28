@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ genre.name }} | Удалить жанр{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<h2>Удаление жанра {{ genre }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="alert alert-warning" role="alert">
+        <p>Вы уверены, что хотите удалить жанр <strong>{{ genre }}</strong> ?</p>
+    </div>
+    <button type="submit" class="btn btn-danger">Удалить</button>
+</form>
+<p><a href="{% url 'admin_genre_detail' genre_id=genre.id %}">Нет, вернуться к редактированию</a></p>
+{% endblock %}

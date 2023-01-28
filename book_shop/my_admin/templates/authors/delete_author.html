@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ author.name }} | Удалить автора{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<h2>Удаление автора {{ author }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="alert alert-warning" role="alert">
+        <p>Вы уверены, что хотите удалить автора <strong>{{ author }}</strong> ?</p>
+    </div>
+    <button type="submit" class="btn btn-danger">Удалить</button>
+</form>
+<p><a href="{% url 'admin_author_detail' author_id=author.id %}">Нет, вернуться к редактированию</a></p>
+{% endblock %}

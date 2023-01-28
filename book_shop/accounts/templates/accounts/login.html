@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load account socialaccount %}
+
+{% load static %}
+
+{% block title %}
+    Вход
+{% endblock %}
+
+
+{% block css_additional %}
+<link rel="stylesheet" href="{% static 'example/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+
+<div class="log">
+    <form action="{% url 'my_login' %}" method="post" class="form">
+        {% csrf_token %}
+        <h1>Добро пожаловать!</h1>
+        {% if user.is_authenticated %}
+            <p>Вы вошли в систему как {{ request.user }}.</p>
+            <p>Возможно, вы хотели бы войти в систему, используя другую учётную запись?</p>
+        {% endif %}
+            <div class="form_error">{{ form.non_field_errors }}</div>
+
+            {% for f in form %}
+                <!-- <label class="label_form" for="{{ f.id_for_label }}">{{ f.label|upper }}</label> -->
+                <p>{{ f }}</p>
+                {% if f.errors %}
+                    <div class="form_error">{{ f.errors }}</div>
+                {% endif %}
+            {% endfor %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input class="btn" type="submit" value="Войти">
+    </form>
+    <p class="p"><a class="sss" href="{% url 'reset_password' %}">Забыли пароль?</a></p>
+    <p>Войти с помощью:</p>
+    <a href="{% provider_login_url 'google' %}?next={{ request.get_full_path }}">Google</a>
+    <p class="p2">
+        <a class="reg" href="{% url 'register' %}">Регистрация</a>
+    </p>
+</div>
+{% endblock %}

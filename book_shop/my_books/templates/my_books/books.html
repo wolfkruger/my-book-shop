@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Книги{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<form action="{% url 'search' %}" method="get">
+    <p>Введите название или автора:</p>
+    <input type="search" placeholder="Поиск" name="q" required="">
+    <input type="submit" value="Найти">
+</form>
+<br>
+<form action="{% url 'book_list' %}" method="get">
+    <p>Фильтр: </p>
+    <input type="submit" name="title" value="По названиям">
+    <input type="submit" name="author" value="По авторам">
+    <input type="submit" name="price" value="По цене">
+</form>
+{% for book in books %}
+    <h3><a href="{{ book.get_absolute_url }}">{{ book }}</a></h3>
+    <p>
+        {% for authorship in book.authorship.all %}{{ authorship }}<br>{% endfor %}
+        {% if book.image %}
+            <a href="{{ book.get_absolute_url }}"><img class="book-image" src="{{ book.image.url }}" alt=""></a><br>
+        {% endif %}
+        Цена: {{ book.price }} р.<br>
+    </p>
+    <br>
+{% endfor %}
+
+{% if page_obj.has_other_pages %}
+   <nav class="list_pages">
+       {% if page_obj.has_previous %}
+               <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a> |
+       {% endif %}
+
+       <!-- First page -->
+       {% if page_obj.number >= 4 %}
+               <a href="?page={{ page_obj.first_page_number }}">1</a> ... |
+       {% endif %}
+
+       {% for p in paginator.page_range %}
+           {% if page_obj.number == p %}
+               {{ p }} |
+           {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                   <a href='?page={{ p }}'>{{ p }}</a> |
+           {% endif %}
+       {% endfor %}
+
+       <!-- Last page -->
+       {% if page_obj.number <= page_obj.paginator.num_pages|add:-3 %}
+               ... <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a> |
+       {% endif %}
+
+       {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+       {% endif %}
+   </nav>
+{% endif %}
+
+{% endblock %}

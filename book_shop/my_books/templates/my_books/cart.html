@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<h3>Моя корзина</h3>
+{% if my_books %}
+    <form action="{% url 'clear_cart' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Очистить корзину">
+    </form>
+{% endif %}
+{% for book in my_books %}
+    <h3><a href="{{ book.book.get_absolute_url }}">{{ book.book }}</a></h3>
+    <p>
+        {% for authorship in book.authorship.all %}{{ authorship }}<br>{% endfor %}
+        {% if book.book.image %}
+            <a href="{{ book.book.get_absolute_url }}"><img class="book-image" src="{{ book.book.image.url }}" alt=""></a><br>
+        {% endif %}
+        Цена: {{ book.book.price }} р.
+    </p>
+    <form action="{% url 'add_and_del' book_id=book.book.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Удалить" name="delete"> {{ book.quantity }}
+        {% if book.quantity < book.book.number %}<input type="submit" value="Добавить" name="add">{% endif %}
+    </form>
+    <br>
+    <form method="post" action="{% url 'order' book_id=book.id %}">
+        {% csrf_token %}
+        <input type="submit" value="Купить">
+    </form>
+    <br>
+{% endfor %}
+{% endblock %}

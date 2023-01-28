@@ -1,0 +1,19 @@
+<nav>
+    <a href="{% url 'admin_index' %}">Управление</a> |
+    Добро пожаловать, {{ request.user }}. |
+    <a href="{% url 'index' %}">Открыть сайт</a> |
+    <a href="{% url 'my_logout' %}">Выйти</a>
+</nav>
+
+<ul>
+    <li><h3>БИБЛИОТЕКА</h3></li>
+    <li><a href="{% url 'admin_books' %}">Книги</a></li>
+    <li><a href="{% url 'admin_authors' %}">Авторы</a></li>
+    <li><a href="{% url 'admin_genres' %}">Жанры</a></li>
+
+    <li><h3>АККАУНТЫ</h3></li>
+    <li><a href="{% url 'admin_users' %}">Пользователи</a></li>
+
+    <li><h3>ЗАКАЗЫ</h3></li>
+    <li><a href="{% url 'admin_orders' %}">Заказы</a></li>
+</ul>

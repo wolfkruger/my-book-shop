@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<h1>Оформление заказа</h1>
+<h3>{{ book.book.title }}</h3>
+<p>
+    {% for authorship in book.authorship.all %}{{ authorship }}<br>{% endfor %}
+    {% if book.book.image %}
+        <img class="book-image" src="{{ book.book.image.url }}" alt=""><br>
+    {% endif %}
+    Количество: {{ book.quantity }} шт.<br>
+    Общая сумма: {{ total_price }} р.
+</p>
+
+<form action="{% url 'confirm_order' book_id=book.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Подтвердить заказ">
+</form>
+{% endblock %}

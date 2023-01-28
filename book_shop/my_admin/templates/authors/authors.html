@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Авторы{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<h2>Авторы</h2>
+<p><a href="{% url 'admin_add_author' %}">Добавить автора</a></p>
+<table>
+    <tr>
+        <th>Автор</th>
+        <th>Страна</th>
+    </tr>
+    {% for author in authors %}
+    <tr>
+        <td><a href="{% url 'admin_author_detail' author_id=author.id %}">{{ author.name }}</a></td>
+        <td>{{ author.country }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Всего авторов: {{ total_quantity }}.</p>
+
+{% if page_obj.has_other_pages %}
+    <nav class="list_pages">
+       {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a> |
+       {% endif %}
+
+       <!-- First page -->
+       {% if page_obj.number >= 4 %}
+               <a href="?page={{ page_obj.first_page_number }}">1</a> ... |
+       {% endif %}
+
+       {% for p in paginator.page_range %}
+           {% if page_obj.number == p %}
+               {{ p }} |
+           {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                   <a href='?page={{ p }}'>{{ p }}</a> |
+           {% endif %}
+       {% endfor %}
+
+       <!-- Last page -->
+       {% if page_obj.number <= page_obj.paginator.num_pages|add:-3 %}
+               ... <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a> |
+       {% endif %}
+
+       {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+       {% endif %}
+    </nav>
+{% endif %}
+{% endblock %}

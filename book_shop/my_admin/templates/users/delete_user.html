@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ user }} | Удалить пользователя{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<h2>Удаление пользователя {{ user }}</h2>
+<form action="{% url 'admin_user_delete' user_id=user.id %}" method="post">
+    {% csrf_token %}
+    <div class="alert alert-warning" role="alert">
+        <p>Вы уверены, что хотите удалить пользователя <strong>{{ user }}</strong> ?</p>
+    </div>
+    <button type="submit" class="btn btn-danger">Удалить</button>
+</form>
+<p><a href="{% url 'admin_user' user_id=user.id %}">Нет, вернуться к редактированию</a></p>
+{% endblock %}

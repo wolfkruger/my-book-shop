@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Завершить заказ{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'my_admin/includes/navbar.html' %}
+<h2>Завершение заказа</h2>
+<p>Завершить заказ пользователя <strong>{{ order.user }}</strong> на книгу <strong>{{ order.books }}</strong>?</p>
+<form action="{% url 'admin_complete_order' order_id=order.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Завершить заказ" name="save">
+</form>
+{% endblock %}

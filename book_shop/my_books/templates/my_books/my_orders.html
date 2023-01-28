@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Мои заказы{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<h1>Мои заказы</h1>
+{% for order in orders %}
+    <h3><a href="{{ order.books.get_absolute_url }}">{{ order.books.title }}</a></h3>
+        <p>
+            {% for authorship in order.authorship.all %}{{ authorship }}<br>{% endfor %}
+            {% if order.books.image %}
+                <a href="{{ order.books.get_absolute_url }}">
+                    <img class="book-image" src="{{ order.books.image.url }}" alt="">
+                </a><br>
+            {% endif %}
+            Дата: {{ order.date }}<br>
+            Цена: {{ order.books.price }} р.<br>
+            Количество: {{ order.quantity }} шт.<br>
+            Общая сумма: {{ order.total_price }} р.
+        </p>
+        <br>
+{% endfor %}
+{% if page_obj.has_other_pages %}
+    <nav class="list_pages">
+       {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a> |
+       {% endif %}
+
+       <!-- First page -->
+       {% if page_obj.number >= 4 %}
+               <a href="?page={{ page_obj.first_page_number }}">1</a> ... |
+       {% endif %}
+
+       {% for p in paginator.page_range %}
+           {% if page_obj.number == p %}
+               {{ p }} |
+           {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                   <a href='?page={{ p }}'>{{ p }}</a> |
+           {% endif %}
+       {% endfor %}
+
+       <!-- Last page -->
+       {% if page_obj.number <= page_obj.paginator.num_pages|add:-3 %}
+               ... <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a> |
+       {% endif %}
+
+       {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+       {% endif %}
+    </nav>
+{% endif %}
+{% endblock %}

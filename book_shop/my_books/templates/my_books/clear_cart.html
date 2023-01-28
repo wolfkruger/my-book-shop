@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Очистить корзину{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+<p>Вы действительно хотите удалить все товары из корзины?</p>
+<form action="{% url 'confirm_clear_cart' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Подтвердить">
+</form>
+{% endblock %}
