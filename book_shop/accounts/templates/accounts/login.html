@@ -37,8 +37,10 @@
         <input class="btn" type="submit" value="Войти">
     </form>
     <p class="p"><a class="sss" href="{% url 'reset_password' %}">Забыли пароль?</a></p>
+    {% if socialaccount.providers  %}
     <p>Войти с помощью:</p>
     <a href="{% provider_login_url 'google' %}?next={{ request.get_full_path }}">Google</a>
+    {% endif %}
     <p class="p2">
         <a class="reg" href="{% url 'register' %}">Регистрация</a>
     </p>
