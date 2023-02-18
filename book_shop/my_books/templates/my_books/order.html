@@ -23,4 +23,5 @@
     {% csrf_token %}
     <input type="submit" value="Подтвердить заказ">
 </form>
+<br><a href="{% url 'my_cart' %}">Назад</a>
 {% endblock %}
